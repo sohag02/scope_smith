@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: scopesmith-redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: scopesmith-backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django-insecure-change-me-in-prod
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend,https://scopesmith-backend.onrender.com,https://scopesmith.onrender.com
+    depends_on:
+      - redis
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: scopesmith-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=https://scopesmith-backend.onrender.com/api
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data: {}

@@ -1,0 +1,17 @@
+django
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+psycopg2-binary
+pydantic
+celery
+redis
+django-storages
+boto3
+weasyprint
+drf-spectacular
+python-dotenv
+anthropic
+dj_database_url
+whitenoise
+gunicorn
